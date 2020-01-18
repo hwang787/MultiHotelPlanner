@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>MultiTripPlanner-SearchPage</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/css/blog-post.css" type="text/css" rel="stylesheet">
+      
+      
+  <style>
+      #map {
+       height: 900px;  /* The height is 400 pixels */
+       width: 100%;  /* The width is the width of the web page, % shows the percentage*/
+      }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">MultiTripPlanner</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+            <!--
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>-->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+        
+        
+        <div class="col-lg-2">
+        </div>
+
+      <!-- Post Content Column -->
+      <div class="col-lg-7">
+
+        <!-- Title -->
+        <h1 class="mt-4">Select Your Destinations!</h1>
+
+        <!-- Author -->
+        <p class="lead">
+          by Group 45
+        </p>
+
+        <hr>
+
+        <!-- Date/Time -->
+        <button id="submitl" type="submit" class="btn btn-primary">Submit</button
+        
+        <hr>
+        
+        <hr>
+
+        <!-- Preview Image -->
+        <div id="map"></div>
+
+        <hr>
+
+        
+
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-lg-3">
+          
+          <!-- Search Widget -->
+          <div class="card my-4">
+            <h5 class="card-header">Search</h5>
+            <div class="card-body">
+              <div class="input-group">
+                <input id="pac-input" type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          
+          <div class="card my-4">
+            <h5 class="card-header">Selected Locations</h5>
+            <div class="card-body" id="selected-location">
+            </div>
+          </div>
+
+
+        <!-- Categories Widget -->
+        <!--
+        <div class="card my-4">
+          <h5 class="card-header">Categories</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#">Web Design</a>
+                  </li>
+                  <li>
+                    <a href="#">HTML</a>
+                  </li>
+                  <li>
+                    <a href="#">Freebies</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-6">
+                <ul class="list-unstyled mb-0">
+                  <li>
+                    <a href="#">JavaScript</a>
+                  </li>
+                  <li>
+                    <a href="#">CSS</a>
+                  </li>
+                  <li>
+                    <a href="#">Tutorials</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>-->
+
+        <!-- Side Widget -->
+        
+        <!--
+        <div class="card my-4">
+          <h5 class="card-header">Side Widget</h5>
+          <div class="card-body">
+            You can put anything you want inside of these side widgets. They are easy to use, and feature the new Bootstrap 4 card containers!
+          </div>
+        </div>-->
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/jquery/jquery.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
+  
+  <!-- Initialize page actions -->
+  <script>
+
+  var latLngList = [];
+
+    // Initialize and add the map
+    function initMap()
+    {
+        // The location boundary
+        var NEW_YORK_BOUNDS = {north: 40.85, south: 40.45, west: -74.3, east: -73.5,};
+
+        var NewYork = {lat: 40.65, lng: -73.7};
+
+
+
+        // google.maps.Map construct a new google map object, A.K.A the map, centered at Uluru
+        var map = new google.maps.Map(
+          // find the element in the page, and load the map into the element
+          document.getElementById('map'),
+          // properties: include zoom and center
+          {
+            center: NewYork,
+            restriction: {
+              latLngBounds: NEW_YORK_BOUNDS,
+              strictBounds: false,
+              },
+              zoom: 11,
+          });
+
+        map.addListener('click', function(e) {placeMarkerAndPanTo(e.latLng, map);});
+
+        var input = document.getElementById('pac-input');
+        var searchBox = new google.maps.places.SearchBox(input);
+      
+        // send out messages after click the submit button, the submit button is added in div with id submitLocation
+        var submit = document.getElementById("submitl");
+        //var submit = document.getElementById("submitl");
+        // click the button and call sendList Fuction
+        submit.onclick = msgTrans;
+        
+        var location_list = document.getElementById("selected-location");
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener('bounds_changed', function() {
+          searchBox.setBounds(map.getBounds());
+        });
+
+        // Listen for the event fired when the user selects a prediction and retrieve
+        // more details for that place.
+        searchBox.addListener('places_changed', function()
+        {
+          var places = searchBox.getPlaces();
+                              
+                              var inputPlace = document.getElementById('pac-input').value;
+                              //console.log(input1.value);
+        
+                              //console.log("in function");
+
+          // if the input is empty, return the function
+         if (places.length == 0)
+            return;
+                              
+         if (places[0].geometry.location.lat() >= 40.85161 || places[0].geometry.location.lat() <= 40.5585)
+            return;
+        
+         if (places[0].geometry.location.lng() >= -73.5171 || places[0].geometry.location.lng() <= -74.016)
+            return;
+          
+          // For each place, get the icon, name and location.
+          places.forEach(function(place)
+          {
+            if (!place.geometry)
+            {
+              console.log("Returned place contains no geometry");
+              return;
+            }
+            // Create a marker for each place.
+            var marker = new google.maps.Marker({map: map, position: place.geometry.location});
+
+            // add the location of search box into the list
+            latLngList.push({lat: place.geometry.location.lat(),lng: place.geometry.location.lng()});
+
+            console.log(latLngList);
+                         
+                         
+            var list_item = document.createElement("li");
+                         //<li class="list-group-item" id="start1">Airport, NY</li>
+                         list_item.setAttribute("class", "list-group-item");
+                         list_item.setAttribute("id", place.geometry.location.lat()+"&"+place.geometry.location.lng());
+                         console.log(inputPlace);
+                         //list_item.value = inputPlace;
+                         list_item.innerText = inputPlace;
+                         location_list.appendChild(list_item);
+
+
+            // remove marker
+            marker.addListener("click",function(e)
+            {
+
+              // delete the marker
+              marker.setMap(null);
+
+              // find the index of the element corresponding to the deleted marker
+              var index = latLngList.findIndex(function(element){
+                if((element["lat"] == e.latLng.lat())&&(element["lng"] == e.latLng.lng()))
+                  return  element;
+              })
+                               
+              // remove place from the list
+                               var list_item = document.getElementById(e.latLng.lat() + "&" + e.latLng.lng());
+                               list_item.parentNode.removeChild(list_item);
+
+              // delete the corresponding element in array
+              latLngList.splice(index,1);
+              // current array output
+              console.log(latLngList);
+
+            })
+        });
+      });
+    
+
+        function placeMarkerAndPanTo(latLng, map)
+        {
+            function geocodePosition(pos)
+            {
+              geocoder = new google.maps.Geocoder();
+
+              geocoder.geocode({latLng: pos}, function(responses)
+              {
+                if (responses && responses.length > 0)
+                {
+                  //addr.push(responses[0].formatted_address);
+                  var list_item = document.createElement("li");
+                         //<li class="list-group-item" id="start1">Airport, NY</li>
+                         list_item.setAttribute("class", "list-group-item");
+                         list_item.setAttribute("id", pos.lat()+"&"+pos.lng());
+                         list_item.innerText = responses[0].formatted_address;
+                         location_list.appendChild(list_item);
+                }
+                else
+                {
+                  console.log('Cannot determine address at this location.');
+                }
+              });
+            }
+            
+            geocodePosition(latLng);
+            
+          latLngList.push({lat: latLng.lat(),lng: latLng.lng()});
+
+          // The marker, positioned at e.latLng
+          var marker = new google.maps.Marker({position: latLng, map: map});
+          // current array output
+          console.log(latLngList);
+
+          // remove the marker
+          marker.addListener("click",function(e)
+          {
+
+              // delete the marker
+              marker.setMap(null);
+
+              // find the index of the element corresponding to the deleted marker
+              var index = latLngList.findIndex(function(element){
+                  if((element["lat"] == e.latLng.lat())&&(element["lng"] == e.latLng.lng()))
+                      return  element;
+                                               });
+                             
+              var list_item = document.getElementById(e.latLng.lat() + "&" + e.latLng.lng());
+              list_item.parentNode.removeChild(list_item);
+
+              // delete the corresponding element in array
+              latLngList.splice(index,1);
+              // current array output
+              console.log(latLngList);
+                             
+              
+              // delNode = document.getElementById('div'+(index+1));
+              // delNode.parentNode.removeChild(delNode);
+
+          })
+        }
+      
+    }
+
+    // send msg, encode current latLngList into a json file and then send it to the server, using POST method
+    function msgTrans() {
+      const Http = new XMLHttpRequest();
+
+      // server address
+      const url='localhost:3000/send_location';
+      Http.open("POST", url);
+      // latLngList2 = JSON.parse(JSON.stringify(latLngList));
+      // console.log(latLngList2);
+      Http.setRequestHeader("Content-Type", "application/json");
+
+      // send msg
+      Http.send(JSON.stringify(latLngList));
+      
+      // msg receiving
+      Http.onreadystatechange = (e) => {
+          if (Http.readyState == 4 && Http.status == 200)
+              // received msg
+              var json = JSON.parse(Http.responseText);
+              window.location.href = "localhost:3000" + json["redirect"];
+              console.log(json); 
+      }
+    }
+    
+
+    // in the script the initMap function is called, note that the callback = initMap
+    // async defer: page continue to render while the api is loading
+  </script>
+  
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6yfhH9WZ_U3kyVyxIVmnfVnFT9YAAgI4&libraries=places&callback=initMap"async defer>
+  </script>
+</body>
+
+</html>

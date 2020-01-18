@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>MultiTripPlanner-HotelPage</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/css/blog-post.css" type="text/css" rel="stylesheet">
+      
+      
+  <style>
+      #map {
+       height: 600px;  /* The height is 400 pixels */
+       width: 100%;  /* The width is the width of the web page, % shows the percentage*/
+      }
+      .list-group-item {
+          padding: 3px 10px;
+          font-size: 12px;
+      }
+      #select-hotel {
+          height: 100px;
+          overflow:scroll;
+      }
+      #waypoint-label {
+          font-size: 12px;
+          text-align: center;
+      }
+	  #hotel-image {
+		  height: 200px;
+	  }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">MultiTripPlanner</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+			<!--
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>-->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+    
+    
+      <div class="col-lg-2">
+          
+          <div class="card my-4">
+            <h5 class="card-header">Route</h5>
+            <div class="card-body">
+              <div id="directions-panel">
+                  Your route plan will be shown here!
+              </div>
+            </div>
+          </div>
+      </div>
+
+      <!-- Post Content Column -->
+      <div class="col-lg-7">
+
+        <!-- Title -->
+        <h1 class="mt-4">Select Your Hotels !</h1>
+
+        <!-- Author -->
+        <p class="lead">
+          by Group 45
+        </p>
+
+
+        <hr>
+
+        <!-- Preview Image -->
+        <div id="map"></div>
+
+        <hr>
+
+      </div>
+
+      <!-- Sidebar Widgets Column -->
+      <div class="col-lg-3">
+        
+        <br>
+        
+        <!-- Hotel Info -->
+        <div class="card">
+            <img class="card-img-top" id="hotel-image" src="http://placehold.it/500x325" alt="">
+            <div class="card-body">
+                <h4 class="card-title" id="hotel-name">Card title</h4>
+                <div class="row">
+                    <div class="col" id="price">
+                        price
+                    </div>
+                    <div class="col" id="stars">
+                        rating
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <br>
+
+
+        <!-- Hotel Select -->
+        
+        <div class="row">
+            <div class="col-4">
+                <p class="waypoint-label">Start</p>
+            </div>
+            
+            <div class="col-8">
+                <div class="card">
+                    <li class="list-group-item" id="start" value="JFK, NY">Airport, NY</li>
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="list-group" id="myList" role="tablist">
+                        <% arr.forEach((hotel_ids, i) => {%>
+                            <a class="list-group-item list-group-item-action" data-toggle="list" href="<%="#day" + i%>" role="tab" onclick="displayHotel(<%=i%>)">
+                                <%="Day " + (i + 1)%>
+                            </a>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-8">
+                <div class="card">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="default" role="tabpanel">
+                            <select class="custom-select" id="default-select-box" multiple>
+                            </select>
+                        </div>
+                        <% arr.forEach((hotel_ids, i) => {%>
+                            <div class="tab-pane" id="<%="day" + i%>" role="tabpanel">
+                                <select class="custom-select" id="<%="select-hotel-" + i%>" onclick="display(this.value)" multiple>
+                                    <% hotel_ids.forEach((hotel_id, i) => {%>
+                                        <option value=<%=hotel_id%>> <%= detail[hotel_id]["Location_sum"]%> </option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <div class="row">
+            <div class="col-4">
+                <p class="waypoint-label">End</p>
+            </div>
+            
+            <div class="col-8">
+                <div class="card">
+                    <li class="list-group-item" id="end" value="JFK, NY">Airport, NY</li>
+                </div>
+            </div>
+        </div>
+        
+        <button id="submitl" type="submit" class="btn btn-primary">Submit</button>
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/jquery/jquery.min.js"></script>
+  <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
+  
+  <!-- Initialize page actions -->
+  <script>
+      
+      $('#myList a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+      })
+
+  var detail = <%- JSON.stringify(detail) %>;
+  var arr = <%- JSON.stringify(arr) %>;
+  var latLngList = <%- JSON.stringify(location) %>;
+  var dayNum = 0;
+  var hotels = [];
+  function initMap() {
+      arr.forEach((hotel_ids) => {
+                  hotels.push(hotel_ids[0]);
+                  });
+      var directionsService = new google.maps.DirectionsService;
+      var directionsRenderer = new google.maps.DirectionsRenderer;
+  
+      var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 11,
+            center: {lat: 40.76, lng: -73.96}
+      });
+      directionsRenderer.setMap(map);
+
+      document.getElementById('submitl').addEventListener('click', function() {
+            calculateAndDisplayRoute(directionsService, directionsRenderer);
+      });
+      console.log(latLngList);
+      placeSitesMarker(latLngList, map);
+  }
+		
+  function displayHotel(dayIndex) {
+      //console.log("choose day ");
+      //console.log(dayIndex);
+      dayNum = dayIndex;
+  }
+
+  function display(id) {
+      //console.log("hotel" + id);
+      hotels[dayNum]=id;
+      var hotelImage = document.getElementById("hotel-image");
+      hotelImage.setAttribute("src", detail[id]["picture_url"]);
+      document.getElementById("hotel-name").innerHTML = detail[id]["Location_sum"];
+      document.getElementById("price").innerHTML = "$" + detail[id]["price"] + "per day";
+      document.getElementById("stars").innerHTML = detail[id]["review_scores_rating"] + "/100";
+  }
+
+  function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+    var waypts = [];
+    hotels.forEach((hotel_id) => {
+                   waypts.push({
+                               location:{"lat": detail[hotel_id]["latitude"], lng: detail[hotel_id]["longitude"]},
+                               stopover:true
+                               });
+                   });
+    
+    //console.log(document.getElementById('start').value);
+    //console.log(document.getElementById('end').value);
+    
+    directionsService.route({
+        origin: "JFK, NY",
+        destination: "JFK, NY",
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: 'DRIVING'
+                            }, function(response, status) {
+        if (status === 'OK') {
+            directionsRenderer.setDirections(response);
+            var route = response.routes[0];
+            var summaryPanel = document.getElementById('directions-panel');
+            summaryPanel.innerHTML = '';
+            // For each route, display summary information.
+            for (var i = 0; i < route.legs.length; i++) {
+                var routeSegment = i + 1;
+                summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment + '</b><br>';
+                summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+                summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+                summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+            }
+        } else {
+                window.alert('Directions request failed due to ' + status);
+        }
+    });
+  }
+  
+  function placeSitesMarker(latLngList, map)
+  {
+      latLngList.forEach(function(location){
+          //var latLng = {lat:location[0], lng: location[1]};
+                        // console.log(latLng);
+          var marker = new google.maps.Marker({position: location, map: map,
+                                          icon: {
+                                              url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                                          }
+                                      });
+      })
+  }
+    
+
+    // in the script the initMap function is called, note that the callback = initMap
+    // async defer: page continue to render while the api is loading
+  </script>
+  
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6yfhH9WZ_U3kyVyxIVmnfVnFT9YAAgI4&callback=initMap"async defer>
+  </script>
+</body>
+
+</html>
